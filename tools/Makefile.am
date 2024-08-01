@@ -4,6 +4,7 @@ AM_CPPFLAGS = \
 
 AM_CFLAGS = \
 	$(GLOBAL_CFLAGS) \
+	$(ssl_lib_CFLAGS) \
 	$(libplist_CFLAGS) \
 	$(LFS_CFLAGS)
 
@@ -30,7 +31,8 @@ bin_PROGRAMS = \
 	idevicedevmodectl \
 	idevicenotificationproxy \
 	idevicecrashreport \
-	idevicesetlocation
+	idevicesetlocation \
+	afcclient
 
 idevicebtlogger_SOURCES = idevicebtlogger.c
 iidevicebtlogger_CFLAGS = $(AM_CFLAGS)
@@ -48,7 +50,7 @@ idevicename_LDFLAGS = $(AM_LDFLAGS)
 idevicename_LDADD = $(top_builddir)/src/libimobiledevice-1.0.la
 
 idevicepair_SOURCES = idevicepair.c
-idevicepair_CFLAGS = $(AM_CFLAGS) $(ssl_lib_CFLAGS)
+idevicepair_CFLAGS = $(AM_CFLAGS)
 idevicepair_LDFLAGS = $(AM_LDFLAGS) $(libusbmuxd_LIBS) $(ssl_lib_LIBS)
 idevicepair_LDADD = $(top_builddir)/src/libimobiledevice-1.0.la $(top_builddir)/common/libinternalcommon.la $(limd_glue_LIBS)
 
@@ -63,8 +65,8 @@ idevice_id_LDFLAGS = $(AM_LDFLAGS)
 idevice_id_LDADD = $(top_builddir)/src/libimobiledevice-1.0.la
 
 idevicebackup_SOURCES = idevicebackup.c
-idevicebackup_CFLAGS = $(AM_CFLAGS) $(ssl_lib_CFLAGS) $(limd_glue_CFLAGS)
-idevicebackup_LDFLAGS = $(AM_LDFLAGS) $(ssl_lib_LIBS) $(limd_glue_LIBS)
+idevicebackup_CFLAGS = $(AM_CFLAGS) $(limd_glue_CFLAGS)
+idevicebackup_LDFLAGS = $(AM_LDFLAGS) $(limd_glue_LIBS)
 idevicebackup_LDADD = $(top_builddir)/src/libimobiledevice-1.0.la
 
 idevicebackup2_SOURCES = idevicebackup2.c
@@ -73,8 +75,8 @@ idevicebackup2_LDFLAGS = $(AM_LDFLAGS) $(limd_glue_LIBS)
 idevicebackup2_LDADD = $(top_builddir)/src/libimobiledevice-1.0.la
 
 ideviceimagemounter_SOURCES = ideviceimagemounter.c
-ideviceimagemounter_CFLAGS = $(AM_CFLAGS) $(limd_glue_CFLAGS)
-ideviceimagemounter_LDFLAGS = $(AM_LDFLAGS) $(limd_glue_LIBS)
+ideviceimagemounter_CFLAGS = $(AM_CFLAGS) $(limd_glue_CFLAGS) $(libtatsu_CFLAGS)
+ideviceimagemounter_LDFLAGS = $(AM_LDFLAGS) $(limd_glue_LIBS) $(ssl_lib_LIBS) $(libtatsu_LIBS)
 ideviceimagemounter_LDADD = $(top_builddir)/src/libimobiledevice-1.0.la
 
 idevicescreenshot_SOURCES = idevicescreenshot.c
@@ -131,3 +133,12 @@ idevicesetlocation_SOURCES = idevicesetlocation.c
 idevicesetlocation_CFLAGS = $(AM_CFLAGS)
 idevicesetlocation_LDFLAGS = $(AM_LDFLAGS)
 idevicesetlocation_LDADD = $(top_builddir)/src/libimobiledevice-1.0.la
+
+afcclient_SOURCES = afcclient.c
+afcclient_CFLAGS = $(AM_CFLAGS)
+afcclient_LDFLAGS = $(AM_LDFLAGS)
+if HAVE_READLINE
+  afcclient_CFLAGS += $(readline_CFLAGS)
+  afcclient_LDFLAGS += $(readline_LIBS)
+endif
+afcclient_LDADD = $(top_builddir)/src/libimobiledevice-1.0.la $(limd_glue_LIBS)
